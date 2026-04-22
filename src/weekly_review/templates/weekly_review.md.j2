@@ -1,0 +1,121 @@
+{# Weekly Review Template for Logseq/GTD #}
+# Weekly Review — {{ review.week_string }} ({{ review.date_range_string }})
+
+## Week at a Glance
+| Metric | Count |
+|--------|-------|
+| Days with entries | {{ review.days_with_entries }}/{{ review.total_days }} |
+| Completed tasks | {{ review.completed_tasks|length }} |
+| Unique people | {{ review.people|length }} |
+| Meetings | {{ review.meetings|length }} |
+| Decisions captured | {{ review.decisions|length }} |
+| Projects active | {{ review.projects|length }} |
+
+{% if review.completed_tasks %}
+## ✅ Completed This Week
+{% for task in review.completed_tasks %}
+- [x] {{ task.text }}{% if task.source_date %} ({{ task.source_date.strftime('%a %m/%d') }}){% endif %}
+{%- endfor %}
+{% else %}
+## ✅ Completed This Week
+_No completed tasks recorded this week._
+{% endif %}
+
+{% if review.decisions %}
+## 📝 Key Decisions & Notes
+{% for decision in review.decisions %}
+- {{ decision.text }}{% if decision.source_date %} ({{ decision.source_date.strftime('%a') }}){% endif %}
+{%- endfor %}
+{% else %}
+## 📝 Key Decisions & Notes
+_No significant decisions recorded._
+{% endif %}
+
+{% if review.people %}
+## 👥 People This Week
+{% for person in review.people %}
+- {% if person.page_link %}[[{{ person.page_link }}]]{% else %}{{ person.name }}{% endif %}{% if person.mentions %} — {{ person.mentions|length }} mention{{ 's' if person.mentions|length > 1 else '' }}{% endif %}
+{%- endfor %}
+{% else %}
+## 👥 People This Week
+_No people mentioned._
+{% endif %}
+
+{% if review.meetings %}
+## 📅 Meetings & Time Blocks
+{% for meeting in review.meetings %}
+- {% if meeting.start_time and meeting.end_time %}{{ meeting.start_time }}-{{ meeting.end_time }} {% endif %}{{ meeting.title }}{% if meeting.attendees %} (with {% for p in meeting.attendees %}{% if not loop.first %}, {% endif %}[[{{ p }}]]{% endfor %}){% endif %}
+{%- endfor %}
+{% else %}
+## 📅 Meetings & Time Blocks
+_No meetings recorded._
+{% endif %}
+
+{% if review.projects %}
+## 🚀 Active Projects
+{% for project in review.projects|sort(attribute='tasks_count', reverse=true) %}
+- {% if project.page_link %}[[{{ project.page_link }}]]{% else %}{{ project.name }}{% endif %}{% if project.tasks_count %} — {{ project.completed_tasks_count }}/{{ project.tasks_count }} tasks{% endif %}
+{%- endfor %}
+{% else %}
+## 🚀 Active Projects
+_No projects referenced._
+{% endif %}
+
+{% if review.topics %}
+## 🏷️ Topics This Week
+{% for topic in review.topics %}
+- [[{{ topic }}]]
+{%- endfor %}
+{% endif %}
+
+{% if review.carry_overs_high or review.carry_overs_medium or review.carry_overs_recent %}
+## 🔄 Carry-Over Suggestions (Prioritized)
+
+{% if review.carry_overs_high %}
+### 🔴 High Priority ({{ review.carry_overs_high|length }} items, 3+ days old)
+Review these first - they need attention or should be moved to Someday/Maybe.
+{% for task in review.carry_overs_high %}
+- [ ] {{ task.text }} (from {{ task.source_date.strftime('%a %m/%d') }})
+{%- endfor %}
+{% endif %}
+
+{% if review.carry_overs_medium %}
+### 🟡 Medium Priority ({{ review.carry_overs_medium|length }} items, 2 days old)
+{% for task in review.carry_overs_medium %}
+- [ ] {{ task.text }} (from {{ task.source_date.strftime('%a %m/%d') }})
+{%- endfor %}
+{% endif %}
+
+{% if review.carry_overs_recent %}
+### 🟢 Recent ({{ review.carry_overs_recent|length }} items, 1 day old)
+{% for task in review.carry_overs_recent %}
+- [ ] {{ task.text }}{% if task.is_carry_over %} (from {{ task.source_date.strftime('%a') }}){% endif %}
+{%- endfor %}
+{% endif %}
+{% else %}
+## 🔄 Carry-Over Suggestions
+_No open tasks to carry over. Great job!_ 🎉
+{% endif %}
+
+## ⏳ Waiting-For Aging Check
+_Review your waiting-for list and follow up on items older than expected._
+
+| Item | Age | Status | Action |
+|------|-----|--------|--------|
+| ... | ... | ... | ... |
+
+## 📊 Weekly Reflection
+- What worked well this week?
+- What could be improved?
+- What did I learn?
+- What am I grateful for?
+
+---
+*Generated: {{ review.generated_at.strftime('%Y-%m-%d %H:%M') }}*
+*Source: {{ review.daily_notes_parsed }} daily notes + {{ review.work_contexts_parsed }} work-context files*
+
+## 🎯 Next Week Preview
+- [ ] What are the 3 most important outcomes for next week?
+- [ ] What meetings are already scheduled?
+- [ ] What deadlines are approaching?
+- [ ] What do I need to prepare?

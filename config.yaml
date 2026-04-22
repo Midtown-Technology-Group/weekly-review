@@ -1,0 +1,41 @@
+# Weekly Review Generator Configuration
+# Place this file in your knowledge graph root directory
+
+# Paths (relative to knowledge graph root)
+daily_notes_path: daily
+work_context_path: pages
+output_path: reviews/weekly
+
+# Fuzzy matching threshold (0-100)
+# Higher = stricter matching, fewer duplicates
+# Lower = looser matching, more items may be flagged as duplicates
+fuzzy_threshold: 85
+
+# Date format for parsing (keep as ISO 8601)
+date_format: "%Y-%m-%d"
+
+# Sections to include in output
+sections:
+  - metrics
+  - completed
+  - decisions
+  - people
+  - meetings
+  - projects
+  - carryovers
+  - waiting_for
+
+# Template settings
+# Use "default" for built-in template, or specify path to custom .j2 file
+template: default
+
+# Carry-over priority thresholds (days)
+carry_over_high_threshold: 3      # 3+ days old = high priority
+carry_over_medium_threshold: 2    # 2 days old = medium priority
+                                  # 1 day old = recent
+
+# Task patterns to exclude (regex patterns)
+# Useful for filtering out routine/recurring tasks
+excluded_task_patterns: []
+  # - "^Check email$"
+  # - "^Daily standup$"

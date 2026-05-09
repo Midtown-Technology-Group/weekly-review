@@ -1,0 +1,41 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="Weekly Review"
+    Manufacturer="Midtown Technology Group LLC"
+    Version="$(var.Version)"
+    UpgradeCode="{14F23CEC-69EF-514C-AC24-B7ECD418DDEE}"
+    InstallerVersion="500"
+    Scope="perMachine">
+
+    <SummaryInformation Description="Weekly Review installer" Manufacturer="Midtown Technology Group LLC" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Weekly Review is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLROOT" Name="Midtown Technology Group">
+        <Directory Id="INSTALLFOLDER" Name="Weekly Review" />
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="MainFeature" Title="Weekly Review" Level="1">
+      <ComponentGroupRef Id="ToolComponents" />
+    </Feature>
+
+    <ComponentGroup Id="ToolComponents" Directory="INSTALLFOLDER">
+      <Component Id="ToolExecutableComponent" Guid="*">
+        <File Id="ToolExecutable" Source="$(var.BinDir)\weekly-review.exe" KeyPath="yes" />
+      </Component>
+      <Component Id="PathComponent" Guid="{C1C51AFF-DF1F-5FB9-8B73-620E4466ADB1}">
+        <CreateFolder />
+        <Environment
+          Id="ToolPathEntry"
+          Action="set"
+          Name="PATH"
+          Part="last"
+          Permanent="no"
+          System="yes"
+          Value="[INSTALLFOLDER]" />
+      </Component>
+    </ComponentGroup>
+  </Package>
+</Wix>

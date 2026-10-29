@@ -152,7 +152,7 @@ def generate(
 
     # Load configuration
     if config_path:
-        config = load_config(config_path.parent)
+        config = Config.from_yaml(config_path.resolve())
     else:
         config = load_config()
 
@@ -281,8 +281,17 @@ def preview(
     week: Optional[str] = typer.Argument(None, help="Week to preview (e.g., '2026-W16')"),
 ) -> None:
     """Quick preview of what would be generated (alias for generate --dry-run)."""
-    # Call generate with dry_run=True
-    generate(week=week, dry_run=True)
+    # Direct calls must supply values instead of Typer's option declarations.
+    generate(
+        week=week,
+        start_date=None,
+        end_date=None,
+        include_last_week=False,
+        dry_run=True,
+        output_path=None,
+        config_path=None,
+        verbose=False,
+    )
 
 
 def main():

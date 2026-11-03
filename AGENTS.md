@@ -13,3 +13,12 @@ Preserve ISO-week/date-range boundaries, fuzzy matching semantics, carryover agi
 Do not overwrite human notes, journals, review edits, or source work-context pages as a side effect of testing. Confirm output location and existing-file handling before a real generation. Never commit real meeting, customer, task, or personnel content. Generated carryovers are suggestions, not completed task actions.
 
 `invoke.ps1` starts from the wrapper's parent and can install the package automatically. Without a supplied or discovered configuration, that parent is the default graph root; a supplied `-ConfigPath` or discovered configuration makes the configuration file's parent the graph root. Inspect the effective source and output paths before running it. Verify options in `cli.py` rather than copying README examples blindly. Tag-driven MSI publication and machine installation are separate operational actions; follow the exact workflow/build script and report source checks separately from deployed behavior.
+
+## Secret gate before publication
+
+Before every push and PR creation/update, commit the complete candidate and run
+`python3 scripts/secret_gate.py` (native Windows: `python`). Require exit 0;
+missing tooling/authentication, scan errors and skipped scans block publication.
+Then run the existing repository gates. Repeat after changing outgoing commits.
+See [secret scanning](SECRET-SCANNING.md) for base selection, new branches,
+pre-push input and prerequisites. Preserve GitGuardian App, CI and Gitleaks checks.

@@ -415,7 +415,7 @@ def confirm_message_scan(output, documents, directory):
     failure = "SCAN_ERROR: incomplete or unsupported message scan; publication blocked."
     try:
         report = json.loads(output)
-    except (ValueError, TypeError, UnicodeError) as error:
+    except (ValueError, TypeError) as error:
         raise GateError(4, failure) from error
     if not clean_receipt(report) or report.get("type") != "path_scan":
         raise GateError(4, failure)
